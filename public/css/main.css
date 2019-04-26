@@ -92,17 +92,71 @@ img {
 }
 .top-buffer { margin-top:20px; }
 
+.top-buffer2 { margin-top:40px; }
+
 .vertical-center-row {
     display: table-cell;
     vertical-align: middle;
 }
 
-.display-value{
+.display-text{
   font-size: 35px;
 }
+
+.display-value{
+  font-size: 45px; 
+}
+
 
 .box-content {
     display: inline-block;
     width: 200px;
     padding: 10px;
+}
+
+
+.row-centered {
+  text-align:center;
+}
+
+.col-centered {
+display:inline-block;
+float:none;
+/* reset the text-align */
+text-align:center;
+/* inline-block space fix */
+margin-right:-4px;
+}
+
+.flex{
+  display: flex;
+}
+
+.align-fm{
+  vertical-align: middle;
+}
+
+.row:before,
+.row:after {
+  display: table;
+  content: " ";
+}
+.row:after {
+  clear: both;
+}
+
+
+
+.b_color{
+  background-color: #EDF4F7;
+  overflow: hidden;
+}
+.grey_bg{
+
+  background-color: '#D3D3D3';
+
+}
+
+.mycontent-left {
+  border-right: 2px solid white;
 }

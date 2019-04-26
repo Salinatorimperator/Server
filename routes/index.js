@@ -6,13 +6,25 @@ const csv = require('csvtojson')
 const fs = require('fs');
 var moment = require('moment');
 //const upload = multer({ dest: 'tmp/csv/' });
+//var config = require('config/config.json')
 
 console.log(router)
 
 
 var cDate = new Date()
 
-console.log(cDate.getDate())	
+const dairly_units = 25;
+
+var values = {
+	state: 'Wait...',
+	units_left: 0,
+	pitch_avg:0,
+	units_prod:0,
+	exceeded_time:0
+}
+
+
+/*	
 var values = {
 	state: '',
 	current_pu: 0,
@@ -20,7 +32,7 @@ var values = {
 	daily_avg:'15 min',
 	target_avg:'12 min'
 }
-
+*/
 var state, time;
 var results = {state : "", time : ""};
 
@@ -42,7 +54,7 @@ fs.watchFile('data.csv', function (curr, prev){
 	});
 */
 
-
+/*
 fs.watchFile('data.csv', function (curr, prev){
 		csv()
 		.fromFile('data.csv')
@@ -65,19 +77,93 @@ fs.watchFile('data.csv', function (curr, prev){
 			})
 
 	});
+*/
 
 
 router.get('/', function (req, res, next) {
+		
+	  csv()
+		.fromFile(require('path').join(__dirname, '..', 'data.csv'))
+		.then((jsonObj)=>{
+			results = jsonObj
+		    //console.log(jsonObj.State);
+    		var dates = results.map((o)=>moment(o.Timestamp).format("MM-DD-YYYY HH:mm:ss"))
+    		var states = results.map((o)=>o.State)
+    		values.state = states[states.length-1]
+			values.units_left = dairly_units - results.reduce((acc, cur) => {
 
-	  console.log(values)
+				if(acc.lastState !== cur.State && cur.State == 'transit') acc.count += 1
+				acc.lastState = cur.State
+				return acc
+			}, {lastState: undefined, count: 0}).count
+
+			})
+		
       res.render('base',{ 
-      	values: values
+      	values: values,
+      	//config: config
       });
+
+      //values.current_pu = 0
     })
 
+
 router.post('/getdata', (req, res) => {
-	console.log(req.body)
-	console.log(values)
+
+
+	csv()
+	.fromFile(require('path').join(__dirname, '..', 'data.csv'))
+	.then((jsonObj)=>{
+		results = jsonObj
+	    //console.log(jsonObj.State);
+		/*var dates = results.reduce((acc, cur)=>{
+
+			if(acc.lastState !== cur.State && cur.State == 'transit'){
+				var date  = new Date(cur.Timestamp);
+				var seconds = date.getTime();
+				acc.avg+=seconds-lastTime;
+				it+=1;
+
+				acc.lastState = cur.State	
+
+			}
+			acc.lastTime = seconds
+		},{lastState: undefined, lastTime:0, avg:0, it:0})
+		console.log(dates)	*/
+
+		var states = results.map((o)=>o.State)
+		values.state = states[states.length-1]
+
+		
+		var val = results.reduce((acc, cur) => {
+
+
+			var date  = new Date(cur.Timestamp);
+			var seconds = date.getTime()/1000;
+			if(acc.lastTime == 0) acc.lastTime = seconds 
+			if(acc.lastState !== cur.State && cur.State == 'transit'){
+
+				acc.count += 1
+
+				
+				//console.log(acc.lastTime)
+				//console.log(seconds)
+				
+				acc.avg += seconds - acc.lastTime;
+					
+				
+				acc.it += 1;
+				acc.lastTime = seconds
+
+			} 
+			acc.lastState = cur.State
+
+			return acc
+		}, {lastState: undefined, count: 0, lastTime: 0, avg: 0, it: 0})
+		values.units_left = dairly_units - val.count
+		values.pitch_avg =  val.avg/val.it
+		console.log(values.pitch_avg)
+		})
 	res.send({values})
 })
 

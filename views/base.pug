@@ -8,25 +8,18 @@ html(lang="en")
     block headcontent
       header
         h1.bold(style={color: 'black', background: 'grey'}) Data Visualization
-        p.bold.align-top=`${results}`
+        p.bold.align-top
         script(src="https://code.jquery.com/jquery-3.4.0.min.js", integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=", crossorigin="anonymous")
         script.
           function handleData (data, state) {
             if (state === 'error') console.log(data)
             if(state === 'success') {
-              console.log(data)
-              // if(data.alarms.length > 0) $('#navbar').addClass('alarm-navbar')
-              // else $('#navbar').removeClass('alarm-navbar')
-              // var alarms = data.alarms.map(o => {
-              //   return `signal-light-${o}`
-              // })
-              // // console.log(alarms)
-              // $('.signal-light').each((ind, o) => {
-              //   if(alarms.indexOf(o.id) > -1) $(o).find('.signal-background').addClass('alarm')
-              //   else $(o).find('.signal-background').removeClass('alarm')
-              //   // if(data.mean[ind] != )
-              //   $(o).find('.mean').text(parseInt(data.mean[ind]))
-              // })
+              //console.log(data.values)
+              $("#pitch_state").text(data.values.state);
+              $("#units_left").text(data.values.units_left);  
+              $("#pitch_avg").text(data.values.pitch_avg);
+              console.log(data.values.pitch_avg)  
+
             } 
           }
 
@@ -41,6 +34,12 @@ html(lang="en")
             })
           }
 
+          var polling = setInterval(() => poll(handleData), 5000)
+          /*
+            setInterval(() => {
+              window.location.href = window.location.href
+            }, 5000)
+          */
 
     //  
     // meta tags
@@ -147,33 +146,45 @@ html(lang="en")
     block header
       //#section
       //- nav(style={float: 'left', width: '100%', height: '25px', background: 'white.align-top.text-nowrap', padding: '20px'})
-      div.p-4.bg-secondary
-        div.group-all.container.container-fluid.p-4.border
-          div.row.justify-content-between.top-buffer.mr-0.ml-0.bg-secondary
-            div.col.col-3(style={float: 'left', height: '80px', background: 'lightblue', padding: '20px'})
-              p1.bold.align-top=`Current state:` 
-              p1.bold.display-value.ml-5=`${values.state}`
-            // div(style={float: 'left', width: '5%', height: '300px', background: 'white.align-top.text-nowrap', padding: '20px'})    
-            div.col.col-3.ml-0.mr-0(style={float: 'left', height: '80px', background: '#006785', padding: '20px'}) 
-              p1.bold.text-white.align-top.text-nowrap=`Current produced units:` 
-              p1.bold.text-white.display-value.ml-5=`${values.current_pu}`
-            // div(style={float: 'left', width: '5%', height: '300px', background: 'white.align-top.text-nowrap', padding: '20px'})
-            div.col.col-3.ml-0.mr-0(style={float: 'left', height: '80px', background: '#006785', padding: '20px'})
-              p1.bold.text-white.align-top.text-nowrap=`Target produced Units:` 
-              p1.bold.text-white.display-value.ml-5=`${values.target_pu}`          
-              // div(style={float: 'left', width: '100%', height: '25px', background: 'white', padding: '20px'})
-            //div(style={float: 'left', width: '100%', height: '4px', background: 'white', padding: '20px'})
-          //div.row
-            //div.col.col-12(style={float: 'left', width: '100%', height: '12px', background: 'lightgrey', padding: '20px'})
-          div.row.justify-content-around.top-buffer.mr-o.ml-0.bg-secondary
-            div.col.col-3.mr-0.ml-0(style={float: 'left', width: '30%', height: '120px', background: '#006785', padding: '20px'})
-              dt.bold.text-white.align-top.text-nowrap=`Current running daily avg. tact time per units:` 
-              dt.bold.text-white.display-value.text-center.mt-2=`${values.daily_avg}`
-            // div(style={float: 'left', width: '12%', height: '300px', background: 'white', padding: '20px'})
-            div.col.col-3.mr-0.ml-0(style={float: 'left', width: '30%', height: '120px', background: '#006785', padding: '20px'})
-              dt.bold.text-white.align-top.text-nowrap=`Target avg. tact time per units:` 
-              dt.bold.text-white.display-value.text-center.mt-2=`${values.target_avg}`
-          // div(style={float: 'left', width: '12%', height: '300px', background: 'white.align-top.text-nowrap', padding: '20px'})
+      div.p-4.bg-secondary.container.container-fluid.b_color.top-buffer2
+        div.container.container-fluid.p-4.border
+          div.row.justify-content-around
+            #pitch_state.div.col-md-3.align-self-center.bold.display-text.text-center(style={height: '50px', background: '#FFA500'})
+
+          div.row.justify-content-around
+            div.col-md-3.align-self-center           
+              dt.bold.text-center=`Pitch has exceeded  ` + `${values.exceeded_time}`  
+   
+          div.row.justify-content-around.top-buffer2
+            #units_left.div.col.col-3.mr-0.ml-0.bold.text-white.text-center.display-value(style={float: 'left', width: '30%', background: '#FFA500', padding: '20px'})
+              
+
+            #pitch_avg.div.col.col-3.mr-0.ml-0.bold.text-white.text-center.display-value(style={float: 'left', width: '30%', background: '#006785', padding: '20px'})
+              
+
+          div.row.justify-content-around
+            div.col-md-3.align-self-center.bold.text-center=`Total units left line per hour`
+             
+
+            div.col-md-3.align-self-center
+              dt.bold.text-center=`Daily pitch running Average, in secs`
+        div.container.container-fluid.p-4.border.p-4        
+          div.row.justify-content-around
+            div.col-md-6.justify-content-around.display-text
+              div.row(style={height: '100%'}).text-center
+                div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`1`
+                div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`2`
+                div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`3`
+                div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`3`
+            div.col-md-6.justify-content-around.display-text
+              div.row(style={height: '100%'}).text-center
+                div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`3`
+                div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`3`
+                div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`3`
+                div.col-md-3.text-white.bold(style={background:'#A9A9A9'})=`3`        
+
+
+
       
 
     //hr color = "red"
@@ -196,4 +207,3 @@ html(lang="en")
     // Clicky, Mixpanel, Hotjar, etc.
     // Mailchimp
     // Stripe
-

@@ -1,18 +1,3 @@
-
-Server example
-
-
-
-
-
-
-
-
-
-
-
-
-
 # NodeJS + Express + Pug Boilerplate
 Node.js application boilerplate for rapid prototyping and development.
 
