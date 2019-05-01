@@ -18,7 +18,7 @@ html(lang="en")
               $("#pitch_state").text(data.values.state);
               $("#units_left").text(data.values.units_left);  
               $("#pitch_avg").text(data.values.pitch_avg);
-              console.log(data.values.pitch_avg)  
+              //console.log(data.values.pitch_avg)  
 
             } 
           }
@@ -34,7 +34,7 @@ html(lang="en")
             })
           }
 
-          var polling = setInterval(() => poll(handleData), 5000)
+          var polling = setInterval(() => poll(handleData), 1000)
           /*
             setInterval(() => {
               window.location.href = window.location.href
@@ -167,7 +167,7 @@ html(lang="en")
              
 
             div.col-md-3.align-self-center
-              dt.bold.text-center=`Daily pitch running Average, in secs`
+              dt.bold.text-center=`Daily pitch running Average[sec]`
         div.container.container-fluid.p-4.border.p-4        
           div.row.justify-content-around
             div.col-md-6.justify-content-around.display-text
@@ -181,8 +181,9 @@ html(lang="en")
                 div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`3`
                 div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`3`
                 div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`3`
-                div.col-md-3.text-white.bold(style={background:'#A9A9A9'})=`3`        
-
+                div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`3`        
+          div.col-md-3.align-self-center
+            dt.text-center=`Display of units per hour`
 
 
       
