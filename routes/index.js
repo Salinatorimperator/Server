@@ -24,6 +24,8 @@ var values = {
 }
 
 
+
+
 /*	
 var values = {
 	state: '',
@@ -138,8 +140,19 @@ router.post('/getdata', (req, res) => {
 		var val = results.reduce((acc, cur) => {
 
 
+			var today = new Date();
+			
+			var today_day = today.getDate();
+			var today_month =  today.getMonth() + 1;
+			var today_year =  today.getFullYear();
+
 			var date  = new Date(cur.Timestamp);
-			var seconds = date.getTime()/1000;
+			var hours = date.getHours();
+			var minutes = date.getMinutes();
+			var seconds = date.getTime()/1000+9*3600*1000;
+
+			console.log(minutes)
+
 			if(acc.lastTime == 0) acc.lastTime = seconds 
 			if(acc.lastState !== cur.State && cur.State == 'transit'){
 
@@ -162,7 +175,7 @@ router.post('/getdata', (req, res) => {
 		}, {lastState: undefined, count: 0, lastTime: 0, avg: 0, it: 0})
 		values.units_left = dairly_units - val.count
 		values.pitch_avg =  val.avg/val.it
-		console.log(values.pitch_avg)
+		//console.log(values.pitch_avg)
 		})
 	res.send({values})
 })

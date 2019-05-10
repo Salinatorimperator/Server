@@ -7,8 +7,10 @@ html(lang="en")
 
     block headcontent
       header
-        h1.bold(style={color: 'black', background: 'grey'}) Data Visualization
-        p.bold.align-top
+        div.row.justify-content-around
+          div.align-self-start
+            h1.bold.top-buffer2(style={background: 'grey'}) Data Visualization
+
         script(src="https://code.jquery.com/jquery-3.4.0.min.js", integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg=", crossorigin="anonymous")
         script.
           function handleData (data, state) {
@@ -34,7 +36,7 @@ html(lang="en")
             })
           }
 
-          var polling = setInterval(() => poll(handleData), 1000)
+          var polling = setInterval(() => poll(handleData), 5000)
           /*
             setInterval(() => {
               window.location.href = window.location.href
@@ -183,7 +185,7 @@ html(lang="en")
                 div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`3`
                 div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`3`        
           div.col-md-3.align-self-center
-            dt.text-center=`Display of units per hour`
+            dt.text-center=`Units per hour`
 
 
       
