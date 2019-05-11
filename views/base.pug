@@ -20,7 +20,7 @@ html(lang="en")
               $("#pitch_state").text(data.values.state);
               $("#units_left").text(data.values.units_left);  
               $("#pitch_avg").text(data.values.pitch_avg);
-              //console.log(data.values.pitch_avg)  
+              console.log(data.values.units_perhour)  
 
             } 
           }
@@ -36,7 +36,7 @@ html(lang="en")
             })
           }
 
-          var polling = setInterval(() => poll(handleData), 5000)
+          var polling = setInterval(() => poll(handleData), 10000)
           /*
             setInterval(() => {
               window.location.href = window.location.href

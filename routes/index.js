@@ -20,25 +20,21 @@ var values = {
 	units_left: 0,
 	pitch_avg:0,
 	units_prod:0,
-	exceeded_time:0
+	exceeded_time:0,
+	units_perhour:[0,0,0,0,0,0,0,0]
 }
 
 
 
-
-/*	
-var values = {
-	state: '',
-	current_pu: 0,
-	target_pu:'16',
-	daily_avg:'15 min',
-	target_avg:'12 min'
-}
-*/
+// values for units and avg
 var state, time;
 var results = {state : "", time : ""};
 
-//const results = [];
+//values for units per hour
+
+
+
+
 
 /*
 fs.watchFile('data.csv', function (curr, prev){
@@ -134,7 +130,7 @@ router.post('/getdata', (req, res) => {
 		console.log(dates)	*/
 
 		var states = results.map((o)=>o.State)
-		values.state = states[states.length-1]
+		
 
 		
 		var val = results.reduce((acc, cur) => {
@@ -147,36 +143,56 @@ router.post('/getdata', (req, res) => {
 			var today_year =  today.getFullYear();
 
 			var date  = new Date(cur.Timestamp);
-			var hours = date.getHours();
+			var hour = date.getHours();
 			var minutes = date.getMinutes();
 			var seconds = date.getTime()/1000+9*3600*1000;
+			var day =date.getDate();
+			var month = date.getMonth()+1;
+			var year = date.getFullYear();
 
-			console.log(minutes)
+			//console.log(hour)
+			if(today_day == day & today_month == month & today_year == year){
+			//Calculates the last state	
+			values.state = states[states.length-1]
 
+			//Calculates how many units and avg
 			if(acc.lastTime == 0) acc.lastTime = seconds 
+			if(acc.precedent_hour == 0) acc.precedent_hour = hour
+			console.log(cur.State)
 			if(acc.lastState !== cur.State && cur.State == 'transit'){
 
 				acc.count += 1
-
-				
-				//console.log(acc.lastTime)
-				//console.log(seconds)
 				
 				acc.avg += seconds - acc.lastTime;
-					
-				
+									
 				acc.it += 1;
 				acc.lastTime = seconds
 
 			} 
 			acc.lastState = cur.State
 
+
+			//How many units per hour
+			//console.log(acc.precedent_hour)
+			if(hour == acc.precedent_hour){
+				acc.count_per_hour[acc.iteration_vector]+=1;
+
+				acc.precedent_hour = hour;
+			}else{
+				acc.iteration_vector+=1;
+				acc.precedent_hour = hour;
+			}
+
+
+			}
 			return acc
-		}, {lastState: undefined, count: 0, lastTime: 0, avg: 0, it: 0})
+		}, {lastState: undefined, count: 0, lastTime: 0, avg: 0, it: 0, precedent_hour:0, iteration_vector:0, count_per_hour:[0,0,0,0,0,0,0,0]})
 		values.units_left = dairly_units - val.count
-		values.pitch_avg =  val.avg/val.it
-		//console.log(values.pitch_avg)
+		values.pitch_avg =  (val.avg/val.it).toFixed(2)
+		values.units_perhour = val.count_per_hour
+		//console.log(val.count_per_hour)
 		})
+
 	res.send({values})
 })
 
