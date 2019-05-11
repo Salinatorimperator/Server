@@ -20,8 +20,15 @@ html(lang="en")
               $("#pitch_state").text(data.values.state);
               $("#units_left").text(data.values.units_left);  
               $("#pitch_avg").text(data.values.pitch_avg);
-              console.log(data.values.units_perhour)  
-
+              $("#first_hour").text(data.values.units_perhour[0]);
+              $("#second_hour").text(data.values.units_perhour[1]);
+              $("#third_hour").text(data.values.units_perhour[2]); 
+              $("#fourth_hour").text(data.values.units_perhour[3]); 
+              $("#fith_hour").text(data.values.units_perhour[4]); 
+              $("#sixth_hour").text(data.values.units_perhour[5]); 
+              $("#seventh_hour").text(data.values.units_perhour[6]); 
+              $("#eight_hour").text(data.values.units_perhour[7]);   
+              exceeded_time = data.values.exceeded_time
             } 
           }
 
@@ -155,7 +162,7 @@ html(lang="en")
 
           div.row.justify-content-around
             div.col-md-3.align-self-center           
-              dt.bold.text-center=`Pitch has exceeded  ` + `${values.exceeded_time}`  
+              dt.bold.text-center=`Pitch has exceeded  ` + `${exceeded_time}`  
    
           div.row.justify-content-around.top-buffer2
             #units_left.div.col.col-3.mr-0.ml-0.bold.text-white.text-center.display-value(style={float: 'left', width: '30%', background: '#FFA500', padding: '20px'})
@@ -174,16 +181,16 @@ html(lang="en")
           div.row.justify-content-around
             div.col-md-6.justify-content-around.display-text
               div.row(style={height: '100%'}).text-center
-                div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`1`
-                div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`2`
-                div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`3`
-                div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`3`
+                #first_hour.div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})
+                #second_hour.div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})
+                #third_hour.div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})
+                #fourth_hour.div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})
             div.col-md-6.justify-content-around.display-text
               div.row(style={height: '100%'}).text-center
-                div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`3`
-                div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`3`
-                div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`3`
-                div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})=`3`        
+                #fith_hour.div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})
+                #sixth_hour.div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})
+                #seventh_hour.div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})
+                #eight_hour.div.col-md-3.text-white.bold.mycontent-left(style={background:'#A9A9A9'})        
           div.col-md-3.align-self-center
             dt.text-center=`Units per hour`
 
