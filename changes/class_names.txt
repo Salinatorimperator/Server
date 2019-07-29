@@ -1,0 +1,4 @@
+empty
+ready
+not_ready
+transit

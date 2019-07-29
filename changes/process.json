@@ -1,0 +1,19 @@
+{
+	"apps" : [{
+		"name" : "video_detection",
+		"script" :"./transmission_counter.py",
+		"interpreter":"/usr/bin/python3",
+		"watch" : true,
+		"env" : {
+			"NODE_ENV":"production"
+		}},{
+		"name" : "frontend",
+		"script" : "./TransmissionLine/app.js",
+		"watch": true,
+		"restart_delay":1000,
+		"env":{
+			"NODE_ENV":"production"
+		}
+		}]
+		
+}
